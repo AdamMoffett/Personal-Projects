@@ -1,5 +1,5 @@
-# changing text boxes to read only
-# to prevent the user from adding text to the output boxes
+# only print to 'itemize' widget
+# if item amount is > 0
 
 import tkinter as tk
 from tkinter import ttk
@@ -44,9 +44,10 @@ def display(itemize, total, ammo_list, labels, cost):
     # iterate through dictionary to format values and print to text box
     idx = 0
     for key in d:
-        d[key] = cFilter(d[key]*int(ammo_list[idx].get()))
-        final = add(d[key], final)
-        itemize.insert(tk.END, f'{key}: {d[key][0]}g {d[key][1]}s {d[key][2]}c\n')
+        if int(ammo_list[idx].get()) > 0:
+            d[key] = cFilter(d[key]*int(ammo_list[idx].get()))
+            final = add(d[key], final)
+            itemize.insert(tk.END, f'{key}: {d[key][0]}g {d[key][1]}s {d[key][2]}c\n')
         idx+=1
         
     total.insert(tk.END, f'{final[0]}g {final[1]}s {final[2]}c')
@@ -54,7 +55,7 @@ def display(itemize, total, ammo_list, labels, cost):
 def main():
     
     window = tk.Tk()
-    window.title("Pathfinder Ammo Calculator v0.1.1")
+    window.title("Pathfinder Ammo Calculator v0.1.2")
     
     # frame for title text
     tFrame = tk.Frame(window)

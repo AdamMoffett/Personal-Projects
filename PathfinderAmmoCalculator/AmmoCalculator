@@ -1,6 +1,5 @@
-# program for calculating costs for
-# crafting ammunition in Pathfinder.
-# Amounts are displayed with in game currency
+# added dictionary for calculations
+# to allow for future changes and avoid hard coding values
 
 import tkinter as tk
 from tkinter import ttk
@@ -30,68 +29,32 @@ def add(money, total):
 
 # function to display desired output 
 # for itemized and total cost areas
-def display(itemize, total, ammo_list, labels):
+def display(itemize, total, ammo_list, labels, cost):
     
     # clear text fields
     itemize.delete('1.0', tk.END)
     total.delete('1.0', tk.END)
     
-    # initialize temp varialbes
+    # initialize temp varialbe
     final = [0, 0, 0]
-    # coins = [0, 0, 0]
     
-    # coin formot = G.SCI
-    # Gold.SilverCopperIron
-    # calculate itemized values
-    if ammo_list[0].get() != '0':
-        # black powder
-        bp = int(ammo_list[0].get()) * 0.75 # 7s 5c to craft
-        bpl = cFilter(bp)
-        final = add(bpl, final)
-        itemize.insert(tk.END, f'Black Powder: {bpl[0]}g {bpl[1]}s {bpl[2]}c \n')
+    # create a dictionary for label cost pairs
+    d = dict(zip(labels,cost))
+    
+    # iterate through dictionary to format values and print to text box
+    idx = 0
+    for key in d:
+        d[key] = cFilter(d[key]*int(ammo_list[idx].get()))
+        final = add(d[key], final)
+        itemize.insert(tk.END, f'{key}: {d[key][0]}g {d[key][1]}s {d[key][2]}c\n')
+        idx+=1
         
-    if ammo_list[1].get() != '0':
-        # bullet
-        bullet = int(ammo_list[1].get()) * .075 
-        bl = cFilter(bullet)
-        final = add(bl, final)
-        itemize.insert(tk.END, f'Bullet: {bl[0]}g {bl[1]}s {bl[2]}c\n')
-        
-    if ammo_list[2].get() != '0':
-        # Adamantine Bullet
-        adamantite = int(ammo_list[2].get()) * 4.575
-        ad = cFilter(adamantite)
-        final = add(ad, final)
-        itemize.insert(tk.END, f'Bullet (Adamantite): {ad[0]}g {ad[1]}s {ad[2]}c\n')
-        
-    if ammo_list[3].get() != '0':
-        # Silver Bullet
-        sBullet = int(ammo_list[3].get()) * 1.875 
-        sb = cFilter(sBullet)
-        final = add(sb, final)
-        itemize.insert(tk.END, f'Bullet (Silver): {sb[0]}g {sb[1]}s {sb[2]}c\n')
-        
-    if ammo_list[4].get() != '0':
-        # Cold Iron Bullet
-        cBullet = int(ammo_list[4].get()) * .15
-        cb = cFilter(cBullet)
-        final = add(cb, final)
-        itemize.insert(tk.END, f'Bullet (Cold Iron): {cb[0]}g {cb[1]}s {cb[2]}c\n')
-        
-    if ammo_list[5].get() != '0':
-        # Paper Shot
-        pShot = int(ammo_list[5].get()) * 4.5
-        ps = cFilter(pShot)
-        final = add(ps, final)
-        itemize.insert(tk.END, f'Paper Shot: {ps[0]}g {ps[1]}s {ps[2]}c\n')
-        
-        
-    total.insert(tk.END, f' {final[0]}g {final[1]}s {final[2]}c')
+    total.insert(tk.END, f'{final[0]}g {final[1]}s {final[2]}c')
     
 def main():
     
     window = tk.Tk()
-    window.title("Pathfinder Ammo Calculator v0.0.0")
+    window.title("Pathfinder Ammo Calculator v0.0.1")
     
     # frame for title text
     tFrame = tk.Frame(window)
@@ -106,10 +69,19 @@ def main():
         
     labels = ['Black Powder',
              'Bullet',
-             'Bullet (Adamantine)',
+             'Bullet (Adamantite)',
              'Bullet (Silver)',
              'Bullet (Cold Iron)',
              'Paper Shot']
+    
+    # cost of each item corresponding to
+    # the order of items in 'labels'
+    cost = [0.75,
+            .075,
+            4.575,
+            1.875,
+            .15,
+            4.5]
     
     ammo_list = []
     
@@ -123,7 +95,7 @@ def main():
         ammo_list.append(entry)
       
     # button to trigger calculations and display output
-    cButton = ttk.Button(iFrame, text="Calculate", command= lambda : display(itemize, total, ammo_list, labels))
+    cButton = ttk.Button(iFrame, text="Calculate", command= lambda : display(itemize, total, ammo_list, labels, cost))
     cButton.grid(row=6, column=1)
     
     # frame for output

@@ -1,5 +1,5 @@
-# added dictionary for calculations
-# to allow for future changes and avoid hard coding values
+# expanding the list of items the calculator handles
+# adjusted size of text boxes to accommodate for additional items
 
 import tkinter as tk
 from tkinter import ttk
@@ -54,7 +54,7 @@ def display(itemize, total, ammo_list, labels, cost):
 def main():
     
     window = tk.Tk()
-    window.title("Pathfinder Ammo Calculator v0.0.1")
+    window.title("Pathfinder Ammo Calculator v0.1.0")
     
     # frame for title text
     tFrame = tk.Frame(window)
@@ -66,46 +66,70 @@ def main():
     # frame for quantity input
     iFrame = tk.Frame(window)
     iFrame.grid(row=1, column=0, pady=5, padx=5)
-        
+       
+    # total = 13
     labels = ['Black Powder',
              'Bullet',
-             'Bullet (Adamantite)',
+             'Bullet (Pitted)',
+             'Bullet (Adamantine)',
              'Bullet (Silver)',
              'Bullet (Cold Iron)',
-             'Paper Shot']
+             'Pellets', # idx = 6
+             "Alchemical cartridge, dragon's breath",
+             'Alchemical cartdidge, entangling shot',
+             'Alchemical cartdidge, flare',
+             'Alchemical cartdidge, paper shot',
+             'Alchemical cartdidge, salt shot',
+             'Metal cartridge']
     
     # cost of each item corresponding to
     # the order of items in 'labels'
-    cost = [0.75,
-            .075,
-            4.575,
-            1.875,
-            .15,
-            4.5]
+    cost = [0.75, # black powder
+            0.075, # bullet
+            0.375, #bullet (pitted)
+            4.575, # bullet (Adamantine)
+            1.875, # Bullet (Silver)
+            0.15, # bullet (cold iron)
+            0.075, # pellets
+            15, # Alchemical cartridge, dragon's breath
+            15, # Alchemical cartdidge, entangling shot
+            3.75, #Alchemical cartdidge, flare
+            4.5, # Alchemical cartdidge, paper shot
+            4.5, # Alchemical cartdidge, salt shot
+            5.625] # Metal cartridge
     
     ammo_list = []
     
     for idx, text in enumerate(labels):
-        label = tk.Label(iFrame, text=text)
-        label.grid(row=idx, column=0, sticky="W")
-        
-        entry = ttk.Entry(iFrame, width=5)
-        entry.grid(row=idx, column=1, pady=1)
-        entry.insert(tk.END, 0)
-        ammo_list.append(entry)
+        if idx > 6:
+            label = tk.Label(iFrame, text=text)
+            label.grid(row=idx-7, column=2, padx=3,sticky="W")
+            
+            entry = ttk.Entry(iFrame, width=5)
+            entry.grid(row=idx-7, column=3, pady=1)
+            entry.insert(tk.END, 0)
+            ammo_list.append(entry)
+        else:
+            label = tk.Label(iFrame, text=text)
+            label.grid(row=idx, column=0, padx=3, sticky="W")
+            
+            entry = ttk.Entry(iFrame, width=5)
+            entry.grid(row=idx, column=1, pady=1)
+            entry.insert(tk.END, 0)
+            ammo_list.append(entry)
       
     # button to trigger calculations and display output
     cButton = ttk.Button(iFrame, text="Calculate", command= lambda : display(itemize, total, ammo_list, labels, cost))
-    cButton.grid(row=6, column=1)
+    cButton.grid(row=6, column=3, pady=2)
     
     # frame for output
     oFrame = tk.Frame(window)
     oFrame.grid(row=2, column=0, pady=5)
     
-    itemize = tk.Text(oFrame, height=7, width=50)
+    itemize = tk.Text(oFrame, height=7, width=55)
     itemize.grid(row=0, column=0)
     
-    total = tk.Text(oFrame, height=5, width=50)
+    total = tk.Text(oFrame, height=5, width=55)
     total.grid(row=1, column=0, pady=5, padx=5)
     
     window.mainloop()

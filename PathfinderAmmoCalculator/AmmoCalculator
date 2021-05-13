@@ -1,5 +1,5 @@
-# expanding the list of items the calculator handles
-# adjusted size of text boxes to accommodate for additional items
+# changing text boxes to read only
+# to prevent the user from adding text to the output boxes
 
 import tkinter as tk
 from tkinter import ttk
@@ -54,7 +54,7 @@ def display(itemize, total, ammo_list, labels, cost):
 def main():
     
     window = tk.Tk()
-    window.title("Pathfinder Ammo Calculator v0.1.0")
+    window.title("Pathfinder Ammo Calculator v0.1.1")
     
     # frame for title text
     tFrame = tk.Frame(window)
@@ -128,9 +128,13 @@ def main():
     
     itemize = tk.Text(oFrame, height=7, width=55)
     itemize.grid(row=0, column=0)
+    # prevent user from typing in to the text widget
+    itemize.bind("<Key>", lambda e: "break")
     
     total = tk.Text(oFrame, height=5, width=55)
     total.grid(row=1, column=0, pady=5, padx=5)
+    # prevent user from typing in to the text widget
+    total.bind("<Key>", lambda e: "break")
     
     window.mainloop()
     
